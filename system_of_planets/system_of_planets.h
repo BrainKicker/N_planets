@@ -14,6 +14,10 @@
 
 class system_of_planets {
 
+    inline static const char *const window_name = "N planets";
+
+    inline static const int initial_width = 1080, initial_height = 720;
+
     enum Key {
         KEY_UP,
         KEY_DOWN,
@@ -25,6 +29,7 @@ class system_of_planets {
         KEY_SUBTRACT_ZOOM,
         KEY_CONTINUE_EVALUATION,
         KEY_CONTINUE_REMOVING,
+        KEY_TAB,
 
         KEYS_COUNT
     };
@@ -35,19 +40,36 @@ class system_of_planets {
     inline static constexpr double G = 6.67430151515151515151515151515e-3;
 //    inline static constexpr double G = 6.67430151515151515151515151515e-11;
 
-    int zoom = 20;
-    int step_zoom = 1;
+    inline static const std::vector<sf::Color> colors = {
+            sf::Color::Red,
+            sf::Color::Green,
+            sf::Color::Blue,
+            sf::Color::Magenta,
+            sf::Color::White,
+            sf::Color::Cyan,
+            sf::Color::Yellow
+    };
 
-    int offset_x = 0, offset_y = 0;
-    int step_offset_x = 10, step_offset_y = 10;
+    double zoom = 20;
+    double zoom_speed = 1.2;
+
+    double offset_x = 0, offset_y = 0;
+    double step_offset_x = 0.0003, step_offset_y = 0.0003;
+
+    int max_amount_of_steps_drawen = 100000;
 
     bool keys[KEYS_COUNT] {};
 
-    sf::RenderWindow& _window;
+    sf::RenderWindow _window {};
+
+    bool _fullscreen = false;
+    std::pair<int,int> _prev_size {};
+
     int _n;
     std::vector<double> _masses;
     // first dimension * n elements - rs, second dimension * n elements - vs
     geo::dvector _initial;
+    const double _initial_h = 0.01;
     double _h = 0.01;
     rk::runge_kutta::Method _method = rk::runge_kutta::method38;
 
@@ -72,34 +94,25 @@ class system_of_planets {
 
     geo::dvector g_acceleration(const geo::dvector& x, int index);
 
+    void print_invariants();
+
+    void check_h();
+
     void next_tragectory();
     void remove_last_trajectory();
 
-    void draw_trajectory(const trajectory& traj);
+    void draw_trajectory(const trajectory& traj, const sf::Color& color);
+
+    void move_camera_to_next_body();
 
     void handle_keys();
 
 public:
-    system_of_planets(int n, geo::dvector initial, std::vector<double> masses, sf::RenderWindow& window);
-
-//    void test() {
-//        for (int i = 0;;) {
-//            std::cout << "step №" << std::setw(4) << i;
-//            std::cout << ", time = " << i << " sec, ";
-//            std::cout << '{' << _rk.get_x()[0] << ',' << _rk.get_x()[1] << "}, ";
-//            std::cout << '{' << _rk.get_x()[2] << ',' << _rk.get_x()[3] << "}, ";
-//            std::cout << '{' << _rk.get_x()[4] << ',' << _rk.get_x()[5] << "}\n";
-//            if (++i > 10)
-//                break;
-//            _rk.run_until(i);
-//        }
-//    }
+    system_of_planets(int n, geo::dvector initial, std::vector<double> masses);
 
     void start();
 
     void draw();
-
-//    void evaluate_trajectories();
 };
 
 

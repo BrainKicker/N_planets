@@ -10,12 +10,10 @@
 
 int main() {
 
-    sf::RenderWindow window(sf::VideoMode(1080, 720), "N planets");
-
     sf::Event event;
     sf::Clock clock;
 
-    system_of_planets system(3, { 0, -5, -2.5, 2.5, 5, 0, -0.05, 0, 0.025, 0.025, 0, -0.05 }, { 1, 2, 3 }, window);
+    system_of_planets system(3, { 0, -5, -2.5, 2.5, 5, 0, -0.05, 0, 0.025, 0.025, 0, +0.05 }, { 1, 2, 3 });
 
     system.start();
 

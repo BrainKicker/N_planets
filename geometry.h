@@ -1,6 +1,7 @@
 #ifndef MY_CALMATH_GEOMETRY_H
 #define MY_CALMATH_GEOMETRY_H
 
+#include <iostream>
 #include <cmath>
 #include <vector>
 
@@ -32,6 +33,9 @@ namespace geo {
 
         template <typename R>
         friend vector<R> operator*(const R& n, const vector<R>& vect);
+
+        template <typename R>
+        friend std::ostream& operator<<(std::ostream& out, const vector<T>& vect);
     };
 
     template <typename T>
@@ -122,6 +126,19 @@ namespace geo {
     template <typename T>
     vector<T> operator*(const T& n, const vector<T>& vect) {
         return vect * n;
+    }
+
+    template <typename T>
+    std::ostream& operator<<(std::ostream& out, const vector<T>& vect) {
+        out << "{ ";
+        for (int i = 0;;) {
+            out << vect[i];
+            if (++i == vect.size())
+                break;
+            out << ", ";
+        }
+        out << " }";
+        return out;
     }
 
     using dvector = vector<double>;
